@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Prueba;
 use App\Http\Livewire\Pedido\MesaComponent;
 use App\Http\Livewire\Pedido\PedidoFormComponent;
+use App\Http\Livewire\Pedido\DetalleComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,4 @@ Route::get('/', function () {
 Route::get('/prueba', Prueba::class)->name('prueba'); 
 Route::get('/mesas', MesaComponent::class)->name('mesas'); 
 Route::get('/pedidoform/{mesa_id}', PedidoFormComponent::class)->name('pedidoform'); 
+Route::get('/detallepedido/{pedido}', DetalleComponent::class)->name('detallepedido'); 

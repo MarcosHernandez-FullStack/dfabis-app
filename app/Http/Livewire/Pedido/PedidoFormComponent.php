@@ -17,13 +17,14 @@ class PedidoFormComponent extends Component
     public function rules()
     {
         return [
+           
             'pedido.mesa_id' => 'nullable',
             'pedido.cliente_referencia' => 'required',
             'detalle.producto_id' => 'required',
-            'detalle.cantidad' => 'required',
+            'detalle.cantidad'=> 'required',
             'detalle_pedido.*.producto_id' => 'required',
-            'detalle_pedido.*.cantidad' => 'required',
-            'detalle_pedido.*.precio' => 'nullable'
+            'detalle_pedido.*.precio' => 'nullable',
+            'detalle_pedido.*.cantidad' => 'required'
         ];
     }
 
@@ -38,7 +39,11 @@ class PedidoFormComponent extends Component
 
     public function render()
     {
-        $productos=Producto::where('estado','activo')->get();
+        $productos=Producto::where('estado', 'activo')
+                    ->whereHas('categoria', function ($query) {
+                        $query->where('proceso', 'pedido');
+                    })
+                    ->get();
         $cremas=Crema::where('estado','activo')->get();
         return view('livewire.pedido.pedido-form-component',compact('productos','cremas'))
             ->extends('layouts.app')
@@ -50,7 +55,7 @@ class PedidoFormComponent extends Component
         $this->validate(
             [
                 'detalle.producto_id' => 'required',
-                'detalle.cantidad' => 'required',
+                'detalle.cantidad' => 'nullable',
                 'detalle.precio' => 'nullable'
             ]
         );
@@ -64,7 +69,16 @@ class PedidoFormComponent extends Component
        /*  dd($this->detalle_pedido); */
       /*  $this->validate(); */
        $this->pedido->save();
-       $this->pedido->detalles_pedido()->saveMany($this->detalle_pedido);
+       foreach ($this->detalle_pedido as $detalle) {
+           $detalle->pedido_id = $this->pedido->id;
+           for($i=0; $i<=$detalle->cantidad;$i++)
+           {
+                $detalle->offsetUnset('cantidad');
+                $detalle->save();
+           }
+          
+       }
+       redirect()->route('detallepedido', ['pedido' => $this->pedido->id]);
        /*  session()->flash('message', 'Pedido guardado exitosamente.');
         return redirect()->route('mesas'); */
     }

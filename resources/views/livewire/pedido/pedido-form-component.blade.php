@@ -32,7 +32,7 @@
                 <!--begin::Col-->
                 <div class="col-md-1">
                     <label for="validationCustom01" class="form-label">
-                        <Ri:a>Cantidadd</Ri:a><span class="required-indicator sr-only"> (required)</span>
+                        <Ri:a>Cantidad</Ri:a><span class="required-indicator sr-only"> (required)</span>
                     </label>
                     <input type="text" class="form-control" id="validationCustom01" wire:model="detalle.cantidad">
                 </div>

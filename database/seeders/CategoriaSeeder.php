@@ -14,7 +14,8 @@ class CategoriaSeeder extends Seeder
     {
          Categoria::insert(
             [
-                ['nombre' =>'Carnes fritas'],['nombre' =>'Carbohidratos fritos']
+                ['nombre' =>'Carnes fritas','proceso'=>'pedido'],['nombre' =>'Carbohidratos fritos','proceso'=>'pedido'],
+                ['nombre' =>'Agregados','proceso'=>'agregado']
             ]
         );
     }

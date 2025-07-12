@@ -20,4 +20,12 @@ class DetallePedido extends Model
     {
         return $this->belongsTo(Producto::class,'producto_id');
     }
+    public function cremas()
+    {
+        return $this->belongsToMany(Crema::class, 'detalle_crema', 'detalle_pedido_id', 'crema_id');
+    }
+    public function agregados()
+    {
+        return $this->belongsToMany(Producto::class, 'agregado', 'detalle_pedido_id', 'producto_id');
+    }
 }
