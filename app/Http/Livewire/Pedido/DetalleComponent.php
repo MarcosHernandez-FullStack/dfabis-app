@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Mesa;
 use App\Models\Crema;
 use App\Models\Pedido;
+use App\Models\DetallePedido;
 
 class DetalleComponent extends Component
 {
@@ -23,5 +24,10 @@ class DetalleComponent extends Component
         return view('livewire.pedido.detalle-component', compact('pedido','cremas'))
             ->extends('layouts.app')
             ->section('content');
+    }
+
+    public function saveCrema(DetallePedido $detalle,$crema_id)
+    {
+        $detalle->cremas()->toggle($crema_id);
     }
 }

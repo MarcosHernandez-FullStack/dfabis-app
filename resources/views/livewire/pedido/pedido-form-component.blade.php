@@ -89,9 +89,9 @@
                             @endphp --}}
                             <tr >
                                 <td>--</td>
-                                <td>{{ $ped_detalle->producto->nombre}}</td>
-                                <td>S/. {{ $ped_detalle->producto->precio}}</td>
-                                <td>{{ $ped_detalle->cantidad}}</td>
+                                <td>{{ $ped_detalle['producto']['nombre']}}</td>
+                                <td>S/. {{ $ped_detalle['producto']['precio']}}</td>
+                                <td>{{ $ped_detalle['cantidad']}}</td>
                                 <td><button type='button' class='btn btn-warning'>Agregado</button></td>
                                 <td><button type='button' class='btn btn-info'>Cremas</button></td>
                               

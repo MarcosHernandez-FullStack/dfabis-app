@@ -24,7 +24,13 @@
                     <td>
                         <div class="form-check">
                         @forelse($cremas as $key => $crema)
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">{{-- checked --}}
+                            <input class="form-check-input" 
+                             type="checkbox"
+                             value="{{$crema->id}}"
+                             id="crema-{{ $ped_detalle->id }}-{{ $crema->id }}"
+                             wire:change="saveCrema({{$ped_detalle->id}},$event.target.value)"
+                             @checked( $ped_detalle->cremas->contains($crema->id) )
+                             >
                             <label class="form-check-label" for="flexCheckChecked">
                                 {{$crema->nombre}}
                             </label>

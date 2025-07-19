@@ -10,21 +10,20 @@ use App\Models\Pedido;
 class PedidoFormComponent extends Component
 {
     public $mesa_id;
-    public $detalle_pedido;
-    public $detalle;
     public $pedido;
+    public $detalle = [
+        'producto' => null,
+        'precio'      => null,
+        'cantidad'    => null,
+    ];
+    public $detalle_pedido; // colección de arrays
 
     public function rules()
     {
-        return [
-           
-            'pedido.mesa_id' => 'nullable',
-            'pedido.cliente_referencia' => 'required',
-            'detalle.producto_id' => 'required',
-            'detalle.cantidad'=> 'required',
-            'detalle_pedido.*.producto_id' => 'required',
-            'detalle_pedido.*.precio' => 'nullable',
-            'detalle_pedido.*.cantidad' => 'required'
+         return [
+            'pedido.cliente_referencia'        => 'required',
+            'detalle.producto_id'              => 'required|exists:productos,id',
+            'detalle.cantidad'                 => 'required|integer|min:1',
         ];
     }
 
@@ -33,8 +32,7 @@ class PedidoFormComponent extends Component
         $this->mesa_id = $mesa_id;
         $this->pedido = new Pedido();
         $this->pedido->mesa_id = $mesa_id;
-        $this->detalle = new DetallePedido();
-        $this->detalle_pedido = $this->pedido->detalles_pedido;
+        $this->detalle_pedido  = collect();
     }
 
     public function render()
@@ -52,31 +50,36 @@ class PedidoFormComponent extends Component
 
     public function addPedidoDetalle()
     {
-        $this->validate(
-            [
-                'detalle.producto_id' => 'required',
-                'detalle.cantidad' => 'nullable',
-                'detalle.precio' => 'nullable'
-            ]
-        );
-       $this->detalle->precio = $this->detalle->producto->precio;
-       $this->detalle_pedido->push($this->detalle);
-       $this->detalle = new DetallePedido();
+        $this->validate([
+            'detalle.producto_id' => 'required',
+            'detalle.cantidad'    => 'required',
+        ]);
+        $producto = Producto::find($this->detalle['producto_id']);
+        $this->detalle_pedido->push([
+            'producto' => $producto,
+            'precio'   => $producto->precio,
+            'cantidad' => $this->detalle['cantidad'],
+        ]);
+        $this->detalle = [
+            'producto_id' => null,
+            'precio'      => null,
+            'cantidad'    => null,
+        ];
     }
 
     public function save()
     {
-       /*  dd($this->detalle_pedido); */
       /*  $this->validate(); */
        $this->pedido->save();
        foreach ($this->detalle_pedido as $detalle) {
-           $detalle->pedido_id = $this->pedido->id;
-           for($i=0; $i<=$detalle->cantidad;$i++)
+           for($i=0; $i<$detalle['cantidad'];$i++)
            {
-                $detalle->offsetUnset('cantidad');
-                $detalle->save();
+                $detalle_save=new DetallePedido();
+                $detalle_save->pedido_id = $this->pedido->id;
+                $detalle_save->producto_id = $detalle['producto']['id'];
+                $detalle_save->precio = $detalle['precio'];
+                $detalle_save->save();
            }
-          
        }
        redirect()->route('detallepedido', ['pedido' => $this->pedido->id]);
        /*  session()->flash('message', 'Pedido guardado exitosamente.');
