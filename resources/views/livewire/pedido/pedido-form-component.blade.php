@@ -4,6 +4,9 @@
         <div class="card-body">
             <!--begin::Row-->
             <div class="row g-3">
+                <div class="col-12">
+                    <h1>Pedido mesa {{$mesa->numero}}</h1>
+                </div>
                 <!--begin::Col-->
                 <div class="col-md-3">
                     <label for="validationCustom01" class="form-label">
@@ -37,26 +40,7 @@
                     <input type="text" class="form-control" id="validationCustom01" wire:model="detalle.cantidad">
                 </div>
                 <!--end::Col-->
-                 <!--begin::Col-->
-                <div class="col-md-4"> <label for="validationCustom04" class="form-label">Cremas<span
-                            class="required-indicator sr-only"> (required)</span></label> <select class="form-select"
-                        id="validationCustom04">
-                        <option selected="" disabled="" value="">-Seleccionar-</option>
-                        @foreach ($cremas as $crema)
-                        <option value="{{ $crema->id }}">{{$crema->nombre }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <!--end::Col-->
-                  <!--begin::Col-->
-                <div class="col-md-3">
-                    <label for="validationCustom01" class="form-label">
-                        <Ri:a>Observación</Ri:a><span class="required-indicator sr-only"> (required)</span>
-                    </label>
-                    <input type="text" class="form-control" id="validationCustom01">
-                </div>
-                <!--end::Col-->
+               
                 <!--begin::Col-->
                 <div class="col-md-1">
                     <br>
@@ -76,9 +60,6 @@
                                 <th scope="col">Producto</th>
                                 <th scope="col">Costo</th>
                                 <th scope="col">Cantidad</th>
-                                <th scope="col">Agregado</th>
-                                <th scope="col">Cremas</th>
-                                <th scope="col">Observación</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                         </thead>
@@ -88,22 +69,11 @@
                                 $total = $total + $ped_detalle->precio_kg * $ped_detalle->peso;
                             @endphp --}}
                             <tr >
-                                <td>--</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $ped_detalle['producto']['nombre']}}</td>
                                 <td>S/. {{ $ped_detalle['producto']['precio']}}</td>
                                 <td>{{ $ped_detalle['cantidad']}}</td>
-                                <td><button type='button' class='btn btn-warning'>Agregado</button></td>
-                                <td><button type='button' class='btn btn-info'>Cremas</button></td>
-                              
-                              {{--   <td >
-                                  <div class="flex align-items-center">
-                                        <button type="button" class="btn btn-sm btn-icon btn-danger"
-                                            wire:click='removepedido_detalle({{ $key }},{{ $ped_detalle->id ?? 0 }})'>
-                                            <i class="fas fa-trash"></i>
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </td> --}}
+                                <td><button type='button' class='btn btn-danger' wire:click='removePedidoDetalle({{$key}})'>Eliminar</button></td>
                             </tr>
                         @empty
                             <tr>

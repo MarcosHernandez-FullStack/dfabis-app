@@ -26,6 +26,8 @@ class DetallePedido extends Model
     }
     public function agregados()
     {
-        return $this->belongsToMany(Producto::class, 'agregado', 'detalle_pedido_id', 'producto_id');
+        return $this->belongsToMany(Producto::class, 'agregado', 'detalle_pedido_id', 'producto_id')
+                    ->withPivot(['cantidad', 'precio'])
+                    ->withTimestamps();
     }
 }

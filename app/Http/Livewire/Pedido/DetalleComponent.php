@@ -19,9 +19,8 @@ class DetalleComponent extends Component
     
     public function render()
     {
-        $pedido=$this->pedido;
         $cremas= Crema::where('estado', 'activo')->get();
-        return view('livewire.pedido.detalle-component', compact('pedido','cremas'))
+        return view('livewire.pedido.detalle-component', compact('cremas'))
             ->extends('layouts.app')
             ->section('content');
     }
@@ -29,5 +28,12 @@ class DetalleComponent extends Component
     public function saveCrema(DetallePedido $detalle,$crema_id)
     {
         $detalle->cremas()->toggle($crema_id);
+    }
+
+    public function removePedidoDetalle($detalleId)
+    {
+        DetallePedido::find($detalleId)->delete();
+        $this->pedido->refresh();
+        
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Livewire\Prueba;
 use App\Http\Livewire\Pedido\MesaComponent;
 use App\Http\Livewire\Pedido\PedidoFormComponent;
 use App\Http\Livewire\Pedido\DetalleComponent;
+use App\Http\Livewire\Pedido\AgregadoComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ Route::get('/', function () {
 });
 
 Route::get('/prueba', Prueba::class)->name('prueba'); 
+//PEDIDO
 Route::get('/mesas', MesaComponent::class)->name('mesas'); 
-Route::get('/pedidoform/{mesa_id}', PedidoFormComponent::class)->name('pedidoform'); 
+Route::get('/pedidoform/{mesa}', PedidoFormComponent::class)->name('pedidoform'); 
 Route::get('/detallepedido/{pedido}', DetalleComponent::class)->name('detallepedido'); 
+Route::get('/agregadopedido/{detalle_pedido}', AgregadoComponent::class)->name('agregadopedido'); 

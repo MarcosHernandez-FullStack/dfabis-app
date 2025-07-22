@@ -6,9 +6,9 @@
                 <tr>
                     <th style="width: 10px" scope="col">#</th>
                     <th scope="col">Producto</th>
-                    <th scope="col">Acciones</th>
-                    <th scope="col">Agregados</th>
                     <th scope="col">Cremas</th>
+                    <th scope="col">Agregados</th>
+                    <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,10 +17,8 @@
                     $total = $total + $ped_detalle->precio_kg * $ped_detalle->peso;
                 @endphp --}}
                 <tr >
-                    <td>--</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $ped_detalle->producto->nombre}}</td>
-                    <td><button type='button' class='btn btn-warning'>Agregado</button></td>
-                    <td>{{ $ped_detalle->agregados->pluck('nombre')->implode(', ') }}</td>
                     <td>
                         <div class="form-check">
                         @forelse($cremas as $key => $crema)
@@ -38,18 +36,15 @@
                          @empty
                         @endforelse
                     </td>
-
-
-                   {{--  <td>{{ $ped_detalle->cremas->pluck('nombre')->implode(', ')}}</td> --}}
-                    {{--   <td >
-                        <div class="flex align-items-center">
-                            <button type="button" class="btn btn-sm btn-icon btn-danger"
-                                wire:click='removepedido_detalle({{ $key }},{{ $ped_detalle->id ?? 0 }})'>
-                                <i class="fas fa-trash"></i>
-                                Eliminar
-                            </button>
-                        </div>
-                    </td> --}}
+                    <td>
+                        {{ $ped_detalle->agregados->isNotEmpty()
+                        ? $ped_detalle->agregados->map(fn($item) => $item->pivot->cantidad . ' ' . $item->nombre)->implode(', ')
+                        : '--' }}
+                    </td>
+                    <td>
+                        <a class='btn btn-warning' href="{{route('agregadopedido', ['detalle_pedido' => $ped_detalle->id])}}">Agregado</a>
+                        <button type='button' class='btn btn-danger' wire:click='removePedidoDetalle({{$ped_detalle->id}})'>Eliminar</button>
+                    </td>
                 </tr>
             @empty
                 <tr>

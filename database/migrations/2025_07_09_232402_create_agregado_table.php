@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('precio', 8, 2);
             $table->integer('cantidad');
-            $table->foreignId('detalle_pedido_id')->constrained('detalle_pedido');
+            $table->foreignId('detalle_pedido_id')->constrained('detalle_pedido')->onDelete('cascade');
             $table->foreignId('producto_id')->constrained('producto');
             $table->enum('estado', ['activo', 'inactivo'])->default('activo');
             $table->timestamps();

@@ -6,10 +6,11 @@ use Livewire\Component;
 use App\Models\Crema;
 use App\Models\DetallePedido;
 use App\Models\Pedido;
+use App\Models\Mesa;
 
 class PedidoFormComponent extends Component
 {
-    public $mesa_id;
+    public $mesa;
     public $pedido;
     public $detalle = [
         'producto' => null,
@@ -27,11 +28,11 @@ class PedidoFormComponent extends Component
         ];
     }
 
-     public function mount($mesa_id)
+     public function mount(Mesa $mesa)
     {
-        $this->mesa_id = $mesa_id;
+        $this->mesa = $mesa;
         $this->pedido = new Pedido();
-        $this->pedido->mesa_id = $mesa_id;
+        $this->pedido->mesa_id = $mesa->id;
         $this->detalle_pedido  = collect();
     }
 
@@ -42,8 +43,7 @@ class PedidoFormComponent extends Component
                         $query->where('proceso', 'pedido');
                     })
                     ->get();
-        $cremas=Crema::where('estado','activo')->get();
-        return view('livewire.pedido.pedido-form-component',compact('productos','cremas'))
+        return view('livewire.pedido.pedido-form-component',compact('productos'))
             ->extends('layouts.app')
             ->section('content');
     }
@@ -65,6 +65,12 @@ class PedidoFormComponent extends Component
             'precio'      => null,
             'cantidad'    => null,
         ];
+    }
+
+    public function removePedidoDetalle($index)
+    {
+        $this->detalle_pedido->forget($index);
+        $this->detalle_pedido = $this->detalle_pedido->values(); // reindexar
     }
 
     public function save()
